@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #1E293B;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar nav ul li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.sidebar nav ul li:hover {
+    background: #334155;
+    text-decoration: none;
+    
+}
+
+/* main */
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    background: #F1F5F9;
+    text-align: center;
+}
+
+.content h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.subscribe {
+    margin: 20px 0;
+}
+
+.subscribe input {
+    padding: 10px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.subscribe button {
+    padding: 10px 20px;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.subscribe button:hover {
+    background: #1D4ED8;
+}
+
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.intro {
+    margin-top: 20px;
+    margin-bottom: 50px;
+    margin-left: 400px;
+    margin-right: 400px;
+    text-align: center;
+}
+
+.menu_nav a {
+    color: white; 
+    text-decoration: none; 
+}
+
+.menu_nav a:hover {
+    color: #60A5FA; 
+    text-decoration: none; 
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Permite que las tarjetas se ajusten en pantallas pequeñas */
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 400px; /* Limita el ancho máximo */
+    text-align: left;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+</style>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>CIATEQ</h2>
+            <nav>
+                <ul class="menu_nav">
+                    <li>
+                        <a href="{% url 'home' %}">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'investigadores' %}">investigadores</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'proyectos' %}">Proyectos</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'areas' %}">Áreas</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'especialidades' %}">Especialidades</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'lineas_investigacion' %}">Líneas Investigación</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'eventos' %}">Eventos</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'articulos' %}">Artículos</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'unidades' %}">Unidades</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'estudiantes' %}">Estudiantes</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'gestion_general' %}">Gestion</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- Main Content -->
+        <main class="content">
+
+            {% block title %}Home{% endblock %}
+
+            {% block content %}
+            {% if user.is_authenticated %}
+            Hi {{ user.username }}!
+            <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+            </form>
+            {% else %}
+            <p>You are not logged in</p>
+            <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
+            {% endblock %}
+
+            
+
+
+
+            <div class="intro">
+                <H1>CITAEQ</H1>
+                <p>CIATEQ es un Centro de Tecnología Avanzada, este es uno de los centros públicos de investigación del Consejo Nacional de Ciencias y Tecnología.
+                    CIATEQ desarrolla proyectos de tecnologías y realiza investigación aplicada a diferentes áreas del conocimiento y da formación de Recursos Humanos para aumentar la competitividad de nuestros clientes.
+                    Ofrece clases de Posgrado y educación continua en sus instalaciones. 
+                    </p>
+            </div>
+
+
+            <h1>We invest in the world's potential</h1>
+            <p>Here at Flowbite we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.</p>
+            
+            <div class="cards">
+                <!-- Tarjeta del evento más reciente -->
+                {% if evento_reciente %}
+                <div class="card">
+                    
+                    <h2>{{ evento_reciente.nombre }}</h2>
+                    <p>{{ evento_reciente.descripcion }}</p>
+                    <p><strong>Fecha:</strong> {{ evento_reciente.fecha }}</p>
+                    <p><strong>Ubicación:</strong> {{ evento_reciente.ubicacion }}</p>
+                </div>
+                {% endif %}
+            
+                <!-- Tarjeta del artículo más reciente -->
+                {% if articulo_reciente %}
+                <div class="card">
+                    
+                    <h2>{{ articulo_reciente.titulo }}</h2>
+                    <p>{{ articulo_reciente.descripcion }}</p>
+                    <p><strong>Fecha de publicación:</strong> {{ articulo_reciente.fecha_publicacion }}</p>
+                </div>
+                {% endif %}
+            
+                <!-- Tarjeta del proyecto más reciente -->
+                {% if proyecto_reciente %}
+                <div class="card">
+                    
+                    <h2>{{ proyecto_reciente.nombre }}</h2>
+                    <p>{{ proyecto_reciente.descripcion }}</p>
+                    <p><strong>Fecha de inicio:</strong> {{ proyecto_reciente.fecha_inicio }}</p>
+                    <p><strong>Fecha de fin:</strong> {{ proyecto_reciente.fecha_fin }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

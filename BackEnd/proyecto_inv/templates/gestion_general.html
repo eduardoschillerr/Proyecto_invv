@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión General - CIATEQ</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #F1F5F9;
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #1E293B;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #334155;
+        }
+
+        /* Main content area */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            background-color: #F9FAFB;
+            min-height: 100vh;
+        }
+
+
+        /* Content styling */
+        .content-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .titulo_selec {
+            margin-bottom: 20px;
+        }
+
+        .filtro {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .filtro select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        .formulario form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .formulario input, 
+        .formulario select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .formulario button {
+            background-color: #2563EB;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .formulario button:hover {
+            background-color: #1D4ED8;
+        }
+
+        .registros {
+            margin-top: 20px;
+        }
+
+        .registro-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f4f4f4;
+            padding: 15px;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn-edit {
+            background-color: #2563EB;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #DC2626;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>CIATEQ</h2>
+        <nav>
+            <ul class="menu_nav">
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'investigadores' %}">Investigadores</a></li>
+                <li><a href="{% url 'proyectos' %}">Proyectos</a></li>
+                <li><a href="{% url 'areas' %}">Áreas</a></li>
+                <li><a href="{% url 'especialidades' %}">Especialidades</a></li>
+                <li><a href="{% url 'lineas_investigacion' %}">Líneas Investigación</a></li>
+                <li><a href="{% url 'eventos' %}">Eventos</a></li>
+                <li><a href="{% url 'articulos' %}">Artículos</a></li>
+                <li><a href="{% url 'unidades' %}">Unidades</a></li>
+                <li><a href="{% url 'estudiantes' %}">Estudiantes</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-content">
+        <div class="content-section">
+            <h1>Gestión General</h1>
+
+            <!-- Filtro para seleccionar la entidad -->
+            <div class="filtro">
+                <form method="get" action="">
+                    <select name="entidad" id="entidad" onchange="this.form.submit()">
+                        {% for entidad in entidades %}
+                        <option value="{{ entidad }}" {% if entidad == entidad_seleccionada %}selected{% endif %}>
+                            {{ entidad|capfirst }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <!-- Formulario para agregar o editar -->
+            <div class="formulario content-section">
+                <h2 class="titulo_selec">Agregar nuevo {{ entidad_seleccionada|capfirst }}</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Guardar</button>
+                </form>
+            </div>
+
+            <!-- Lista de registros -->
+            <div class="registros">
+                <h2 >Lista de {{ entidad_seleccionada|capfirst }}</h2>
+                {% for registro in registros %}
+                <div class="registro-item">
+                    <span>{{ registro.nombre }}</span>
+                    <div class="acciones">
+                        <a href="{% url 'editar_registro' entidad_seleccionada registro.pk %}" class="btn btn-edit">Editar</a>
+                        <form method="post" action="{% url 'eliminar_registro' entidad_seleccionada registro.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

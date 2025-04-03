@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión General</title>
+    <style>
+        /* Estilos básicos */
+        body {
+            font-family: Arial, sans-serif;
+            background: #F1F5F9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filtro {
+            margin-bottom: 20px;
+        }
+
+        .filtro select {
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+
+        .filtro button {
+            padding: 5px 15px;
+            background-color: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .filtro button:hover {
+            background-color: #1D4ED8;
+        }
+
+        .formulario {
+            margin-bottom: 20px;
+        }
+
+        .registros {
+            margin-top: 20px;
+        }
+
+        .registro-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .registro-item:last-child {
+            border-bottom: none;
+        }
+
+        .acciones a, .acciones button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .acciones .btn-edit {
+            background-color: #2563EB;
+        }
+
+        .acciones .btn-edit:hover {
+            background-color: #1D4ED8;
+        }
+
+        .acciones .btn-delete {
+            background-color: #DC2626;
+        }
+
+        .acciones .btn-delete:hover {
+            background-color: #B91C1C;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar {{ entidad }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+        <a href="{% url 'gestion_general' %}">Cancelar</a>
+    </form>
+</body>
+
+</html>

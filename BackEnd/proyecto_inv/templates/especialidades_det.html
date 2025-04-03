@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigadores</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Contenedor principal */
+.container {
+    display: flex;
+    height: 100vh;
+    background: #F1F5F9;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #1E293B;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.sidebar nav ul li:hover {
+    background: #334155;
+}
+
+.sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar nav ul li a:hover {
+    color: #60A5FA;
+}
+
+
+.investigador-detail {
+    flex-grow: 1;
+    padding: 20px;
+    background: #F9FAFB;
+    text-align: left;
+}
+
+
+.investigador-detail h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #1E293B;
+    text-align: center;
+}
+
+
+.info-section {
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-section h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #2563EB;
+    border-bottom: 2px solid #2563EB;
+    padding-bottom: 5px;
+}
+
+.info-section p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #374151;
+}
+
+/* Listas dentro de las secciones */
+.info-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-section ul li {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #374151;
+    padding: 10px;
+    background: #F9FAFB;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.info-section ul li:hover {
+    background: #E5E7EB;
+}
+
+
+.investigador-detail a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #2563EB;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+    text-align: center;
+}
+
+.investigador-detail a:hover {
+    background: #1D4ED8;
+}
+</style>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>CIATEQ</h2>
+            <nav>
+                <ul class="menu_nav">
+                    <li>
+                        <a href="{% url 'home' %}">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'investigadores' %}">investigadores</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'proyectos' %}">Proyectos</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'areas' %}">Áreas</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'especialidades' %}">Especialidades</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'lineas_investigacion' %}">Líneas Investigación</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'eventos' %}">Eventos</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'articulos' %}">Artículos</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'unidades' %}">Unidades</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'estudiantes' %}">Estudiantes</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+
+        <!-- {% block content %}
+        <div class="investigador-detail">
+            <h1>{{ especialidad.descripcion }}</h1>
+            
+            
+            <div class="info-section">
+                <h2>Investigadores</h2>
+                <ul>
+                    {% for investigador in investigadores %}
+                    <li>{{ investigador.nombre }} - {{ investigador.area.nombre }}</li>
+                    {% endfor %}
+                </ul>
+            
+
+            <a href="{% url 'especialidades' %}">Regresar</a>
+        </div>
+        {% endblock %}
+    </div> -->
+</body>
+</html>
