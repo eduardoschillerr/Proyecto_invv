@@ -1,15 +1,16 @@
+
 import { Link } from 'react-router-dom';
 
 export function Navigation() {
     return (
-        <nav className="bg-blue-600 text-wh p-4 shadow-md">
-            <div className="container mx-auto flex justify-between items-center">
-                <h1 className="text-white text-2xl font-bold">CITAEQ</h1>
-                <ul className="flex space-x-6">
-                    <li >
+        <nav className="bg-blue-950 text-white h-screen w-50 fixed top-0 left-0 shadow-md">
+            <div className="p-1">
+                <h1 className="text- font-bold mb-3">CITAEQ</h1>
+                <ul className="space-y-4">
+                    <li>
                         <Link
                             to="/home"
-                            className="text-white"
+                            className="block text-blue-500 hover:bg-blue-700 p-2 rounded"
                         >
                             Home
                         </Link>
@@ -17,15 +18,13 @@ export function Navigation() {
                     <li>
                         <Link
                             to="/investigadores"
-                            className="text-white"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
                         >
                             Investigadores
                         </Link>
                     </li>
-
                 </ul>
             </div>
         </nav>
     );
 }
-
