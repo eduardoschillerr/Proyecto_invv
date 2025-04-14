@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'proyecto_inv',
+    'drf_yasg',  # new
 
 ]
 
