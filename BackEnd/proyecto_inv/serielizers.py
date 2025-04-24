@@ -2,14 +2,67 @@ from rest_framework import serializers
 from .models import Usuario, DetLinea, DetEvento, DetArt ,DetProy, Estudiante, Investigador, Especialidad, Unidad, Proyecto, Evento, Articulo, Area, Linea, Carrera, TipoEstudiante, TipoEvento, NivelEdu, NivelSNII  # Importa tu modelo
 
 class EstudianteSerializer(serializers.ModelSerializer):
+    carrera = serializers.StringRelatedField()
+
     class Meta:
         model = Estudiante
-        fields = '__all__'  # O especifica los campos que deseas incluir
+        fields = ['id','nombre','investigador','carrera']  # O especifica los campos que deseas incluir
 
 class InvestigadorSerializer(serializers.ModelSerializer):
+    area_nombre = serializers.StringRelatedField(source='area.nombre', read_only=True)
+    nivel_edu_descripcion = serializers.StringRelatedField(source='nivel_edu.descripcion', read_only=True)
+    snii_nivel = serializers.StringRelatedField(source='snii.descripcion', read_only=True)
+
+    estudiantes = EstudianteSerializer(many=True, read_only=True)
+    articulos_detalle = serializers.SerializerMethodField()  # Campo personalizado para los artículos
+    lineas_detalle = serializers.SerializerMethodField()  
+    proyectos_detalle = serializers.SerializerMethodField()
+
+
     class Meta:
         model = Investigador
         fields = '__all__'  
+
+    def get_estudiantes(self, obj):
+        if obj.estudiantes.exists():
+            
+            return [{"id": est.id, "nombre": est.nombre, "carrera":est.carrera} for est in obj.estudiantes.all()]
+        return []
+    
+    def get_articulos_detalle(self, obj):
+    # Accede a la tabla intermedia DetArt para obtener los artículos relacionados
+        det_articulos = DetArt.objects.filter(investigador=obj)
+        return [
+            {
+                "id": det_articulo.articulo.id,
+                "titulo": det_articulo.articulo.titulo,
+                "fecha_publicacion": det_articulo.articulo.fecha_publicacion,
+            }
+            for det_articulo in det_articulos
+        ]
+    
+    def get_lineas_detalle(self, obj):
+        det_lineas = DetLinea.objects.filter(investigador=obj)
+        return [
+            {
+                "id": det_linea.linea.id,
+                "nombre": det_linea.linea.nombre,
+            }
+            for det_linea in det_lineas
+        ]
+    
+    def get_proyectos_detalle(self, obj):
+        det_proyectos = DetProy.objects.filter(investigador=obj)
+        return [
+            {
+                "id": det_proyecto.proyecto.id,
+                "nombre": det_proyecto.proyecto.nombre,
+                "fecha_inicio": det_proyecto.proyecto.fecha_inicio,
+                "fecha_fin": det_proyecto.proyecto.fecha_fin,
+            }
+            for det_proyecto in det_proyectos
+        ]
+
 
 class AreaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,7 +99,8 @@ class ArticulosSerializer(serializers.ModelSerializer):
 class AreasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Area
-        fields = '__all__'  
+        # fields = '__all__' 
+        fields = ['id', 'nombre']    
 
 class LineasInvestigacionSerializer(serializers.ModelSerializer):
     class Meta:

@@ -168,7 +168,7 @@ class Estudiante(models.Model):
     email = models.CharField(max_length=255)
     tipo = models.ForeignKey(TipoEstudiante, on_delete=models.CASCADE)
     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
-    investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE)
+    investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE, related_name='estudiantes')
     esatus = models.BooleanField()
 
     def __str__(self):

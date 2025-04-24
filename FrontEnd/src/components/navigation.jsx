@@ -23,7 +23,23 @@ export function Navigation() {
                             Investigadores
                         </Link>
                     </li>
-                </ul>
+                    <li>
+                        <Link
+                            to="/proyectos"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
+                        >
+                            Proyectos
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/estudiantes"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
+                        >
+                            Estudiantes
+                        </Link>
+                    </li>
+                </ul>   
             </div>
         </nav>
     );

@@ -46,6 +46,8 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),  
     path('api/', include('proyecto_inv.urls')),
+    # path('api/Investigadores/', views.InvestigadoresListCreateView.as_view(), name='investigadores-list-create'),
+    # path('api/Investigadores/<int:pk>/', views.investigador_detail.as_view(), name='investigadores-detail'),
     path('swagger/', schema_view.with_ui('swagger'), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc'), name='schema-redoc'),
 ]

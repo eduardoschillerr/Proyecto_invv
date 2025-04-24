@@ -4,7 +4,7 @@ from .views import SignUpView, InvestigadorListView, InvestigadorDetailView, esp
 from . import views
 
 from rest_framework.routers import DefaultRouter
-from .views import  EstudianteViewSet, InvestigadorViewSet, TipoEventoViewSet, EspecialidadesViewSet, UnidadesViewSet, ProyectosViewSet, EventosViewSet, ArticulosViewSet, AreasViewSet, LineasInvestigacionViewSet, UsuarioViewSet, DetProyViewSet, DetEventoViewSet, DetArtViewSet, DetLineaViewSet, CarreraViewSet, TipoEstudianteViewSet, NivelEduViewSet, NivelSNIIViewSet
+from .views import   EstudianteViewSet, InvestigadorViewSet, TipoEventoViewSet, EspecialidadesViewSet, UnidadesViewSet, ProyectosViewSet, EventosViewSet, ArticulosViewSet, AreasViewSet, LineasInvestigacionViewSet, UsuarioViewSet, DetProyViewSet, DetEventoViewSet, DetArtViewSet, DetLineaViewSet, CarreraViewSet, TipoEstudianteViewSet, NivelEduViewSet, NivelSNIIViewSet
 from .views import get_areas, get_usuarios, get_niveledu,  get_nivelsnii, delete_investigador
 
 
@@ -38,7 +38,7 @@ path('api/areas/', get_areas, name='get_areas'),
 path('api/niveledu/', get_niveledu, name='get_niveledu'),
 path('api/nievlsnii/', get_nivelsnii, name='get_nivelsnii'),
 path('api/Investigador/<int:id>/', delete_investigador, name='delete_investigador'),
-
+# path('api/estudiantes/investigador/<int:investigador_id>/', EstudiantesPorInvestigadorView.as_view(), name='estudiantes-por-investigador'),
 
 
 urlpatterns = [

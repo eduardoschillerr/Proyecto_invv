@@ -8,7 +8,7 @@ from proyecto_inv.models import Usuario,Estudiante, Investigador,Proyecto,Area, 
 from django.http.response import JsonResponse
 from django.views.generic import ListView, DetailView
 
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -79,6 +79,15 @@ def investigador_detail(request, id):
 
 
 
+
+
+
+
+
+
+
+
+## TODAS LAS VIEWS DEL BACKEND
 
 def home(request):
     # Obtén el evento más reciente

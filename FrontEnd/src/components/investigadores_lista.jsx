@@ -17,17 +17,8 @@ export function Investigadores_lista() {
     return (
 
         <div className="min-h-screen bg-white-100 p-6">
-            <li>
-                <Link
-                    to="/InvestigadoresFormPage"
-                    className="text-white-800"
-                    >
-                    Añadir Investigador
-                </Link>
-            </li>
-            <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">
-                Lista de Investigadores
-            </h1>
+            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {Investigador.map((investigador) => (
                     <InvestigadoresCard
@@ -36,6 +27,16 @@ export function Investigadores_lista() {
                     />
                 ))}
             </div>
+
+
+            <li>
+                <Link
+                    to="/InvestigadoresFormPage"
+                    className="text-white-800"
+                    >
+                    Añadir Investigador
+                </Link>
+            </li>
         </div>
     );
 }
