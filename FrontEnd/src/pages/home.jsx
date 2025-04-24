@@ -1,6 +1,6 @@
 export function Home() {
     return (
-        <div className="max-h-screen bg-blue-500 ">
+        <div className="max-h-screen">
 
 
             <section className="mt-8 max-w-screen-lg mx-auto text-center p-4">
@@ -12,9 +12,7 @@ export function Home() {
                 <p className="text-gray-600">
                     Here at CIATEQ we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.
                 </p>
-                <p>
-                    hola no se si esto ya funcuiona
-                </p>
+
             </section>
         </div>
     );  
