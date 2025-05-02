@@ -12,7 +12,7 @@ from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .serielizers import EstudianteSerializer, InvestigadorSerializer, AreaSerializer, EspecialidadesSerializer, UnidadesSerializer, ProyectosSerializer, EventosSerializer, ArticulosSerializer, AreasSerializer, LineasInvestigacionSerializer, DetProySerielizer, DetArtSerielizer, DetEventoSerializer, DetLineaSerializer, CarreraSerializer, TipoEstudianteSerializer, TipoEventoSerializer, NivelEduSerializer, NivelSNIISerializer, UsuarioSerializer
+from .serielizers import  EstudianteSerializer, InvestigadorSerializer, AreaSerializer, EspecialidadesSerializer, UnidadesSerializer, ProyectosSerializer, EventosSerializer, ArticulosSerializer, AreasSerializer, LineasInvestigacionSerializer, DetProySerielizer, DetArtSerielizer, DetEventoSerializer, DetLineaSerializer, CarreraSerializer, TipoEstudianteSerializer, TipoEventoSerializer, NivelEduSerializer, NivelSNIISerializer, UsuarioSerializer
 
 
 from django.views import View
@@ -39,6 +39,10 @@ def get_niveledu(request):
 def get_nivelsnii(request):
     nivelsnii = NivelSNII.objects.all().values('descripcion')
     return JsonResponse(list(nivelsnii), safe=False)
+
+def get_proyectos(request):
+    proyectos = Proyecto.objects.all().values('nombre', 'descripcion')
+    return JsonResponse(list(proyectos), safe=False)
 
 @api_view(['POST'])
 def create_investigador(request):
@@ -76,6 +80,152 @@ def investigador_detail(request, id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+
+@api_view(['GET', 'PUT'])
+def proyectos_detail(request, id):
+    try:
+        proyecto = Proyecto.objects.get(id=id)
+    except Proyecto.DoesNotExist:
+        return Response({"error": "Proyecto no encontrado"}, status=404)
+
+    if request.method == 'GET':
+        serializer = ProyectosSerializer(proyecto)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = ProyectosSerializer(proyecto, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+
+
+@api_view(['GET'])
+def listar_proyectos(request):
+    proyectos = Proyecto.objects.all()
+    serializer = ProyectosSerializer(proyectos, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def lista_articulos(request):
+    articulos = Articulo.objects.all()
+    serializer = ArticulosSerializer(articulos, many=True)
+    return Response(serializer.data)
+
+## dashboar
+from django.http import JsonResponse
+from proyecto_inv.models import Investigador, Estudiante
+
+
+@api_view(['GET'])
+def investigador_stats(request, id):
+    try:
+        investigador = Investigador.objects.get(id=id)
+        estudiantes = Estudiante.objects.filter(investigador=investigador)
+
+        # Asignar puntos a cada estado
+        puntos_por_estado = {
+            'Activo': 1,
+            'Desertor': 0,
+            'Egresado': 3,
+            'Titulado': 5,
+        }
+
+        # Agrupar por estado y calcular puntos
+        estadisticas = {}
+        for estudiante in estudiantes:
+            estado = estudiante.esatus
+            puntos = puntos_por_estado.get(estado, 0) 
+            if estado in estadisticas:
+                estadisticas[estado] += puntos
+            else:
+                estadisticas[estado] = puntos
+
+        
+        data = {
+            "estudiantes": [{"estado": estado, "puntos": puntos} for estado, puntos in estadisticas.items()]
+        }
+
+        return Response(data)
+    except Investigador.DoesNotExist:
+        return Response({"error": "Investigador no encontrado"}, status=404)
+
+@api_view(['GET'])
+def proyecto_stats(request, id):
+    try:
+        investigador = Investigador.objects.get(id=id)
+        proyectos = Proyecto.objects.filter(detproy__investigador=investigador)  # Relación a través de DetProy
+
+        # Asignar puntos a cada estado
+        puntos_por_estado = {
+            'En proceso': 3,
+            'Terminado': 7,
+            'Instalado en sitio': 10,
+        }
+
+        
+        estadisticas = {}
+        for proyecto in proyectos:
+            estado = proyecto.esatus
+            puntos = puntos_por_estado.get(estado, 0)  
+            if estado in estadisticas:
+                estadisticas[estado] += puntos
+            else:
+                estadisticas[estado] = puntos
+
+        
+        data = {
+            "proyectos": [{"estado": estado, "puntos": puntos} for estado, puntos in estadisticas.items()]
+        }
+
+        return Response(data)
+    except Investigador.DoesNotExist:
+        return Response({"error": "Investigador no encontrado"}, status=404)
+    
+@api_view(['GET'])
+def evento_stats(request, id):
+    try:
+        investigador = Investigador.objects.get(id=id)
+        eventos = Evento.objects.filter(detevento__investigador=investigador)  # Relación a través de DetEvento
+
+        
+        puntos_por_tipo = {
+            'Congreso': 5,
+            'Taller': 3,
+            'Conferencia': 4,
+            'Diplomado': 7,
+            'Charla': 2,
+        }
+
+        
+        estadisticas = {}
+        for evento in eventos:
+            tipo = evento.tipo_evento  
+            puntos = puntos_por_tipo.get(tipo, 0)  
+            if tipo in estadisticas:
+                estadisticas[tipo] += puntos
+            else:
+                estadisticas[tipo] = puntos
+
+        
+        data = {
+            "eventos": [{"tipo": tipo, "puntos": puntos} for tipo, puntos in estadisticas.items()]
+        }
+
+        return Response(data)
+    except Investigador.DoesNotExist:
+        return Response({"error": "Investigador no encontrado"}, status=404)
+
+
+
+
+
+
+
+
+
 
 
 

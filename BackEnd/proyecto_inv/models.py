@@ -15,11 +15,12 @@ class Usuario(models.Model):
 
 class Linea(models.Model):
     nombre = models.CharField(max_length=100)
-    esatus = models.BooleanField()
+    institucional = models.BooleanField(default=False)
+    esatus = models.BooleanField(default=False ,null=True)
 
 
     def __str__(self):
-        return f'{self.nombre} {self.esatus}'
+        return f'{self.nombre} {self.esatus} {self.institucional}'
 
 
 class Unidad(models.Model):
@@ -103,10 +104,21 @@ class Articulo(models.Model):
 
 
 class Evento(models.Model):
+    tipo_opciones = [
+         ('Congreso', 'Congreso'),
+         ('Taller', 'Taller'),
+         ('Conferencia', 'Conferencia'),
+         ('Diplomado', 'Diplomado'),
+         ('Charla', 'Charla'),
+
+         ('Curso', 'Curso'),    
+         ('Proyecto', 'Proyecto'),
+
+    ]
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=255, default='')
     fecha = models.DateField()
-    tipo_evento = models.ForeignKey(TipoEvento, on_delete=models.CASCADE)
+    tipo_evento = models.CharField(choices=tipo_opciones, max_length=50, default='Congreso')
     ubicacion = models.CharField(max_length=255, default='')
     organizador = models.CharField(max_length=100, default='')
 
@@ -124,23 +136,23 @@ class Herramienta(models.Model):
 
 
 class Proyecto(models.Model):
-    ESTATUS_OPCIONES = [
-        ('planeacion', 'En planeación'),
-        ('proceso', 'En proceso'),
-        ('terminado', 'Terminado'),
+    ESATUS_OPCIONES = [
+        ('En proceso', 'En proceso'),
+        ('Terminado', 'Terminado'),
+        ('Instalado en sitio', 'Instalado en sitio'),
     ]
 
     nombre = models.CharField(max_length=255)
     descripcion = models.CharField(max_length=255, null=True, blank=True)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
-    esatus = models.CharField(max_length=20, choices=ESTATUS_OPCIONES, default='planeacion')
+    esatus = models.CharField(max_length=20, choices=ESATUS_OPCIONES, default='planeacion')
     herramientas = models.ManyToManyField(Herramienta, through='DetHerr')
     Area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True, blank=True)
 
 
     def __str__(self):
-        return f'{self.nombre} '
+        return f'{self.nombre}'
 
 
 class Investigador(models.Model):
@@ -163,13 +175,20 @@ class Investigador(models.Model):
         # return f'{self.nombre} {self.tel} {self.email} {self.usuario} {self.area} {self.nivel_edu} {self.snii} {self.esatus} {self.lineas} {self.articulos} {self.eventos} {self.proyectos}'
 
 class Estudiante(models.Model):
+    ESATUS_OPCIONES_Est = [
+        ('Activo', 'Activo'),
+        ('Desertor', 'Desertor'),
+        ('Egresado', 'Egresado'),
+        ('Titulado', 'Titulado'),
+    ]
+    
     nombre = models.CharField(max_length=100)
     tel = models.CharField(max_length=25)
     email = models.CharField(max_length=255)
     tipo = models.ForeignKey(TipoEstudiante, on_delete=models.CASCADE)
     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
     investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE, related_name='estudiantes')
-    esatus = models.BooleanField()
+    esatus = models.CharField(max_length=20, choices=ESATUS_OPCIONES_Est, default='Activo')
 
     def __str__(self):
         return f'{self.nombre} {self.carrera} {self.tipo} {self.investigador} {self.esatus} {self.email} {self.tel}'

@@ -5,7 +5,7 @@ from . import views
 
 from rest_framework.routers import DefaultRouter
 from .views import   EstudianteViewSet, InvestigadorViewSet, TipoEventoViewSet, EspecialidadesViewSet, UnidadesViewSet, ProyectosViewSet, EventosViewSet, ArticulosViewSet, AreasViewSet, LineasInvestigacionViewSet, UsuarioViewSet, DetProyViewSet, DetEventoViewSet, DetArtViewSet, DetLineaViewSet, CarreraViewSet, TipoEstudianteViewSet, NivelEduViewSet, NivelSNIIViewSet
-from .views import get_areas, get_usuarios, get_niveledu,  get_nivelsnii, delete_investigador
+from .views import get_areas, get_usuarios, get_niveledu,  get_nivelsnii, delete_investigador ,investigador_stats, investigador_detail, get_proyectos, proyectos_detail, proyecto_stats,evento_stats
 
 
 router = DefaultRouter()
@@ -29,18 +29,21 @@ router.register(r'NivelSNII', NivelSNIIViewSet )
 router.register(r'Usuario', UsuarioViewSet )
 router.register(r'TipoEvento', TipoEventoViewSet )
 
-
-
-
-#ENDPOINTS FAK 
 path('api/usuarios/', get_usuarios, name='get_usuarios'),
 path('api/areas/', get_areas, name='get_areas'),
 path('api/niveledu/', get_niveledu, name='get_niveledu'),
 path('api/nievlsnii/', get_nivelsnii, name='get_nivelsnii'),
 path('api/Investigador/<int:id>/', delete_investigador, name='delete_investigador'),
-# path('api/estudiantes/investigador/<int:investigador_id>/', EstudiantesPorInvestigadorView.as_view(), name='estudiantes-por-investigador'),
+path('api/Investigador/<int:id>/', investigador_detail, name='investigador_detail'),
+path('api/Investigador/<int:id>/stats', investigador_stats, name='investigador_stats'),
+path('api/Investigador/<int:id>/stats', proyecto_stats, name='proyecto_stats'),
+path('api/Investigador/<int:id>/evento_stats', evento_stats, name='evento_stats'),
+
+path('api/Proyecto/', get_proyectos, name='get_proyectos'),
+path('api/Proyecto/<int:id>/', proyectos_detail, name='proyectos_detail'),
 
 
+#ENDPOINTS FAK 
 urlpatterns = [
 
     path('', include(router.urls)),
@@ -57,13 +60,24 @@ urlpatterns = [
     path("especialidades_det/<int:pk>/", especialidadesDetailView.as_view(), name="especialidad_det"),
 
     path("proyectos/", views.proyectos, name="proyectos"),
-
+    path('api/investigadores/<int:id>/stats', investigador_stats, name='investigador_stats'),
 
     path('investigadores/', InvestigadorListView.as_view(), name='investigadores'),
     path('investigadores_det/<int:pk>/', InvestigadorDetailView.as_view(), name='investigadores_det'),
 
+    ##dashboard
+    
+    # path('api/usuarios/', get_usuarios, name='get_usuarios'),
+    # path('api/areas/', get_areas, name='get_areas'),
+    # path('api/niveledu/', get_niveledu, name='get_niveledu'),
+    # path('api/nievlsnii/', get_nivelsnii, name='get_nivelsnii'),
+    # path('api/Investigador/<int:id>/', delete_investigador, name='delete_investigador'),
+    # path('api/Investigador/<int:id>/', investigador_detail, name='investigador_detail'),
+    # path('api/investigadores/<int:id>/stats', investigador_stats, name='investigador_stats'),
 
-    path("estudiantes/", views.estudiantes, name="estudiantes"),
+    
+
+    path("estudiantes/", views.estudiantes, name="estudiantes"),    
 
 
 

@@ -6,7 +6,7 @@ class EstudianteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Estudiante
-        fields = ['id','nombre','investigador','carrera']  # O especifica los campos que deseas incluir
+        fields = '__all__'  # O especifica los campos que deseas incluir
 
 class InvestigadorSerializer(serializers.ModelSerializer):
     area_nombre = serializers.StringRelatedField(source='area.nombre', read_only=True)
@@ -64,6 +64,8 @@ class InvestigadorSerializer(serializers.ModelSerializer):
         ]
 
 
+
+
 class AreaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Area
@@ -81,9 +83,11 @@ class UnidadesSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class ProyectosSerializer(serializers.ModelSerializer):
+    area_nombre = serializers.CharField(source='Area.nombre', read_only=True)  # Incluye el nombre del área
+
     class Meta:
         model = Proyecto
-        fields = '__all__'  
+        fields = ['id', 'nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'esatus', 'area_nombre']
 
 class EventosSerializer(serializers.ModelSerializer):
     class Meta:
@@ -91,10 +95,18 @@ class EventosSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ArticulosSerializer(serializers.ModelSerializer):
+    investigadores = serializers.SerializerMethodField()  
+
+
     class Meta:
         model = Articulo
 
-        fields = '__all__'
+        fields = ['id', 'titulo','descripcion', 'fecha_publicacion', 'investigadores']
+
+    def get_investigadores(self, obj):
+        
+        det_art = DetArt.objects.filter(articulo=obj)
+        return [det.investigador.nombre for det in det_art]
 
 class AreasSerializer(serializers.ModelSerializer):
     class Meta:
