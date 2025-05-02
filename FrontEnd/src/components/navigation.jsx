@@ -39,6 +39,22 @@ export function Navigation() {
                             Estudiantes
                         </Link>
                     </li>
+                    <li>
+                        <Link
+                            to="/eventos"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
+                        >
+                            Eventos
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/articulos"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
+                        >
+                            Articulos
+                        </Link>
+                    </li>
                 </ul>   
             </div>
         </nav>

@@ -1,6 +1,6 @@
 export function Home() {
     return (
-        <div className="max-h-screen">
+        <div className="max-h-screen ">
 
 
             <section className="mt-8 max-w-screen-lg mx-auto text-center p-4">

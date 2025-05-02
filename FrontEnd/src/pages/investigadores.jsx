@@ -1,4 +1,4 @@
-import { Investigadores_lista } from '../components/investigadores_lista.jsx';
+import { Investigadores_lista } from '../components/investigadores/investigadores_lista.jsx';
 
 export function Investigadores() {
     return (

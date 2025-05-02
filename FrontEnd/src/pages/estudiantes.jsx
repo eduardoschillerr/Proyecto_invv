@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 export function Estudiantes() {
     const [estudiantes, setEstudiantes] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchEstudiantes() {
@@ -26,6 +28,10 @@ export function Estudiantes() {
                 <ul className="space-y-4">
                     {estudiantes.map((estudiante) => (
                         <li
+                            onClick={() => {
+                                navigate('/Estudiante/' + estudiante.id);
+                            }}
+
                             key={estudiante.id}
                             className="bg-white shadow-md rounded-lg p-4"
                         >  

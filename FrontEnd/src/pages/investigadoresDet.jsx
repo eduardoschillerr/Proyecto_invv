@@ -98,6 +98,12 @@ export function InvestigadoresDet() {
             >
                 Volver
             </button>
+            <button
+                onClick={() => navigate(`/dashboard/${investigador.id}`)}
+                className="text-indigo-600 hover:text-indigo-900"
+                >
+                Ver Dashboard
+            </button>
 
         </div>
     );
