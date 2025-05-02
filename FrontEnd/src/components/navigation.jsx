@@ -55,6 +55,30 @@ export function Navigation() {
                             Articulos
                         </Link>
                     </li>
+                    <li>
+                        <Link
+                            to="/areas"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
+                        >
+                            Areas
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/unidades"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
+                        >
+                            Unidades
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/lineas"
+                            className="block text-white hover:bg-blue-700 p-2 rounded"
+                        >
+                            Lineas
+                        </Link>
+                    </li>
                 </ul>   
             </div>
         </nav>

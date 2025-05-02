@@ -6,6 +6,9 @@ import {Proyectos} from './pages/proyectos';
 import {Investigadores} from './pages/investigadores';
 import {Eventos} from './pages/eventos';      
 import {Articulos} from './pages/articulos';
+import {Areas} from './pages/areas';
+import { Unidades } from './pages/unidades';
+import { Lineas } from './pages/lineas';
 
 import {Navigation} from './components/navigation';
 import { InvestigadoresFormPage } from './pages/investigadoresFormPage';
@@ -35,6 +38,9 @@ function App() {
           <Route path="/proyectos" element={<Proyectos />} />
           <Route path="/eventos" element={<Eventos />} />
           <Route path="/articulos" element={<Articulos />} />
+          <Route path="/areas" element={<Areas />} />
+          <Route path="/unidades" element={<Unidades />} />
+          <Route path="/lineas" element={<Lineas />} />
           
           {/* <Route path="/proyectos/:id" element={<ProyectosDet />} /> */}
           {/* <Route path="/eventos/:id" element={<EventosDet />} /> */}
