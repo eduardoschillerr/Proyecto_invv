@@ -101,7 +101,7 @@ class ArticulosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Articulo
 
-        fields = ['id', 'titulo','descripcion', 'fecha_publicacion', 'investigadores']
+        fields = ['id', 'titulo','descripcion', 'fecha_publicacion', 'investigadores','enlace']
 
     def get_investigadores(self, obj):
         

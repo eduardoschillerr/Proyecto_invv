@@ -28,12 +28,22 @@ export function InvestigadoresCard({ Investigador }) {
         navigate('/investigadores/' + Investigador.id);
       }}
       className="bg-white shadow-md rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow"
-    >
+    >  
+      {Investigador.imagen && (
+      <img
+        src={Investigador.imagen}
+        
+        className="w-full h-48 object-cover rounded-t-lg mb-4"
+      />
+      )}
+
+      
       <h1 className="text-xl font-bold text-gray-800 mb-2">
         {Investigador.nombre}
       </h1>
       <p className="text-gray-600">{areaNombre || 'Cargando área...'}</p>
       <hr className="mt-4 border-gray-300" />
+
     </div>
   );
 }

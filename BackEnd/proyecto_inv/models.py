@@ -17,6 +17,7 @@ class Linea(models.Model):
     nombre = models.CharField(max_length=100)
     institucional = models.BooleanField(default=False)
     esatus = models.BooleanField(default=False ,null=True)
+    imagen = models.ImageField(upload_to='imagenes/', null=True, blank=True)
 
 
     def __str__(self):
@@ -35,7 +36,7 @@ class Unidad(models.Model):
 class Area(models.Model):
     nombre = models.CharField(max_length=100)
     unidad = models.ForeignKey(Unidad, on_delete=models.CASCADE)
-    esatus = models.BooleanField()
+    esatus = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.nombre} {self.unidad} {self.esatus}'
@@ -147,7 +148,7 @@ class Proyecto(models.Model):
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     esatus = models.CharField(max_length=20, choices=ESATUS_OPCIONES, default='planeacion')
-    herramientas = models.ManyToManyField(Herramienta, through='DetHerr')
+    
     Area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True, blank=True)
 
 
@@ -168,6 +169,8 @@ class Investigador(models.Model):
     articulos = models.ManyToManyField(Articulo, through='DetArt',blank=True)
     eventos = models.ManyToManyField(Evento, through='DetEvento', blank=True)
     proyectos = models.ManyToManyField(Proyecto, through='DetProy', blank=True)
+    imagen = models.ImageField(upload_to='imagenes/', null=True, blank=True)
+    
     
 
     def __str__(self):

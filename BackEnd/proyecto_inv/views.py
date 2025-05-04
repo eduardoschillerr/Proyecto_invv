@@ -44,6 +44,8 @@ def get_proyectos(request):
     proyectos = Proyecto.objects.all().values('nombre', 'descripcion')
     return JsonResponse(list(proyectos), safe=False)
 
+
+## INVESTIGADOR 
 @api_view(['POST'])
 def create_investigador(request):
     serializer = InvestigadorSerializer(data=request.data)
@@ -82,6 +84,7 @@ def investigador_detail(request, id):
         return Response(serializer.errors, status=400)
     
 
+##PROYECTOS
 @api_view(['GET', 'PUT'])
 def proyectos_detail(request, id):
     try:
@@ -100,19 +103,64 @@ def proyectos_detail(request, id):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
-
-
 @api_view(['GET'])
 def listar_proyectos(request):
     proyectos = Proyecto.objects.all()
     serializer = ProyectosSerializer(proyectos, many=True)
     return Response(serializer.data)
 
+def create_proyecto(request):
+    serializer = ProyectosSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['DELETE'])
+def delete_proyecto(request, id):
+    try:
+        proyectos = Proyecto.objects.get(id=id)
+        proyectos.delete()
+        return Response({"message": "Investigador eliminado correctamente"}, status=200)
+    except Investigador.DoesNotExist:
+        return Response({"error": "Investigador no encontrado"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+    
+
+## AREAS
+
+@api_view(['POST'])
+def create_area(request):
+    serializer = AreasSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['DELETE'])
+def delete_area(request, id):
+    try:
+        areas = Area.objects.get(id=id)
+        areas.delete()
+        return Response({"message": "Investigador eliminado correctamente"}, status=200)
+    except Investigador.DoesNotExist:
+        return Response({"error": "Investigador no encontrado"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+
+
 @api_view(['GET'])
 def lista_articulos(request):
     articulos = Articulo.objects.all()
     serializer = ArticulosSerializer(articulos, many=True)
     return Response(serializer.data)
+
+
+
+
+
 
 ## dashboar
 from django.http import JsonResponse

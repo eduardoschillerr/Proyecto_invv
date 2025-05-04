@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 export function Lineas() {
     const [lineas, setLineas] = useState([]); // Estado para almacenar las líneas
@@ -21,7 +23,7 @@ export function Lineas() {
     return (
         <div className="min-h-screen bg-gray-50 p-6">
             <h1 className="text-4xl font-bold text-center mb-8">
-                Página de Líneas de Investigación
+                Líneas de Investigación
             </h1>
             <div>
                 <ul className="space-y-4">
@@ -36,11 +38,29 @@ export function Lineas() {
                             <h2 className="text-xl font-bold text-gray-800">
                                 {linea.nombre}
                             </h2>
+                            {linea.imagen && (
+                                <img
+                                 src={linea.imagen}
+                                 alt={`Imagen de ${linea.nombre}`}
+                                 className="w-full h-48 object-cover rounded-md mt-4"
+                                />
+                            )}
                             
                         </li>
                     ))}
                 </ul>
             </div>
+
+
+            <div className="mt-4">
+                <Link
+                    to="/lineasFormPage"
+                    className="text-white-800"
+                >
+                    Añadir Nueva Linea
+                </Link>
+            </div>
+
         </div>
     );
 }

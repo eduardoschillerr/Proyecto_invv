@@ -24,7 +24,7 @@ export function ProyectosCard({ Proyecto }) {
   return (
     <li
       onClick={() => {
-        navigate('/Proyecto/' + Proyecto.id);
+        navigate('/proyectosFormPage/' + Proyecto.id);
       }}
       className="bg-white shadow-md rounded-lg p-4 mb-4 cursor-pointer hover:shadow-lg transition-shadow"
     >

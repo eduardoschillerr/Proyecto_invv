@@ -48,6 +48,12 @@ export function Articulos() {
                                     <li key={index}>{investigador}</li> 
                                 ))}
                             </ul>
+                            <p className="text-blue-600">
+                                <strong>Enlace:</strong>
+                            </p>
+                            <a href={articulo.enlace} className="text-gray-500 hover:underline">
+                                {articulo.enlace}
+                            </a>
                         </li>
                     ))}
                 </ul>

@@ -11,6 +11,10 @@ import { Unidades } from './pages/unidades';
 import { Lineas } from './pages/lineas';
 
 import {Navigation} from './components/navigation';
+
+import { LineasFormPage } from './pages/lineasFormPage';
+import { AreaFormPage } from './pages/areaFormPage';
+import { ProyectosFormPage } from './pages/proyectosFormPage';
 import { InvestigadoresFormPage } from './pages/investigadoresFormPage';
 import { InvestigadoresDet } from './pages/investigadoresDet';
 import {Toaster} from 'react-hot-toast';
@@ -35,6 +39,21 @@ function App() {
           <Route path="/investigadores" element={<Investigadores />} />
           <Route path="/investigadores/:id" element={<InvestigadoresDet />} /> 
           <Route path="/investigadoresFormPage/:id" element={<InvestigadoresFormPage />} />
+          
+          <Route path="/investigadoresFormPage" element={<InvestigadoresFormPage />} />
+          <Route path="/proyectosFormPage/:id" element={<ProyectosFormPage />} />
+          <Route path="/proyectosFormPage" element={<ProyectosFormPage />} />
+
+          <Route path="/lineasFormPage/:id" element={<LineasFormPage />} />
+          <Route path="/lineasFormPage" element={<LineasFormPage />} />
+
+          <Route path="/areaFormPage/:id" element={<AreaFormPage />} />
+          <Route path="/areaFormPage" element={<AreaFormPage />} />
+          
+          {/* <Route path="/proyectos/:id" element={<ProyectosDet />} /> */}
+          {/* <Route path="/eventos/:id" element={<EventosDet />} /> */}
+
+
           <Route path="/proyectos" element={<Proyectos />} />
           <Route path="/eventos" element={<Eventos />} />
           <Route path="/articulos" element={<Articulos />} />

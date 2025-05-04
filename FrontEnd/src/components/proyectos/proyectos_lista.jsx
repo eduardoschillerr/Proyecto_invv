@@ -32,7 +32,7 @@ export function Proyectos_Lista() {
 
             <li>
                 <Link
-                    to="/InvestigadoresFormPage"
+                    to="/proyectosFormPage"
                     className="text-white-800"
                     >
                     Añadir 
