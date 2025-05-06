@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 export function Investigadores_lista() {
     const [Investigador, setInvestigador] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(false); // Estado para verificar si el usuario es admin
+
 
     useEffect(() => {
         async function loadinvestigadores() {
@@ -12,7 +14,12 @@ export function Investigadores_lista() {
             setInvestigador(res.data);
         }
         loadinvestigadores();
+
+        const adminStatus = localStorage.getItem("is_admin") === "true"; ; // Obtener el rol del usuario desde localStorage
+        setIsAdmin(adminStatus);
     }, []);
+
+
 
     return (
 
@@ -28,15 +35,16 @@ export function Investigadores_lista() {
                 ))}
             </div>
 
-
-            <li>
-                <Link
-                    to="/InvestigadoresFormPage"
-                    className="text-white-800"
-                    >
-                    Añadir Investigador
-                </Link>
-            </li>
+            {isAdmin && (
+                <li>
+                    <Link
+                        to="/InvestigadoresFormPage"
+                        className="text-white-800"
+                        >
+                        Añadir Investigador
+                    </Link>
+                </li>
+            )}
         </div>
     );
 }

@@ -24,8 +24,10 @@ from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from proyecto_inv.views import get_areas, get_usuarios, get_niveledu, get_nivelsnii, delete_investigador, investigador_stats, proyecto_stats, evento_stats
+
+from proyecto_inv.views import get_areas, get_usuarios, get_niveledu, get_nivelsnii, delete_investigador, investigador_stats, proyecto_stats, evento_stats, login_view, is_admin, get_proyectos, proyectos_detail
 from proyecto_inv.views import  InvestigadorListView, InvestigadorDetailView, especialidadesListView, especialidadesDetailView, UnidadesListView
 
 schema_view = get_schema_view(
@@ -70,8 +72,13 @@ urlpatterns = [
     # path('api/Investigadores/', views.InvestigadoresListCreateView.as_view(), name='investigadores-list-create'),
     # path('api/Investigadores/<int:pk>/', views.investigador_detail.as_view(), name='investigadores-detail'),
     path('swagger/', schema_view.with_ui('swagger'), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc'), name='schema-redoc'),
-]
+
+    
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/login/', login_view, name='login'),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

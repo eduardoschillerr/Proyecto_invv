@@ -1,10 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # models.py
 
 
 class Usuario(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100, unique=True)
     email = models.CharField(max_length=100)
     esatus = models.BooleanField()
     password = models.CharField(max_length=255)
@@ -169,7 +170,7 @@ class Investigador(models.Model):
     articulos = models.ManyToManyField(Articulo, through='DetArt',blank=True)
     eventos = models.ManyToManyField(Evento, through='DetEvento', blank=True)
     proyectos = models.ManyToManyField(Proyecto, through='DetProy', blank=True)
-    imagen = models.ImageField(upload_to='imagenes/', null=True, blank=True)
+    imagen = models.ImageField(upload_to='investigadores/', null=True, blank=True)
     
     
 
@@ -197,7 +198,8 @@ class Estudiante(models.Model):
         return f'{self.nombre} {self.carrera} {self.tipo} {self.investigador} {self.esatus} {self.email} {self.tel}'
 
 
-# Through models for many-to-many relationships
+
+
 class DetLinea(models.Model):
     investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE)
     linea = models.ForeignKey(Linea, on_delete=models.CASCADE)
@@ -252,3 +254,5 @@ class DetHerr(models.Model):
 
     def __str__(self):
         return f'{self.proyecto} {self.herramienta}'
+    
+

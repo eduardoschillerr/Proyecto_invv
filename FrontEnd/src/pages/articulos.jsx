@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Link } from "react-router-dom"; // Importar Link para la navegación
 
 export function Articulos() {
-    const [articulos, setArticulos] = useState([]); // Estado para almacenar los artículos
+    const [articulos, setArticulos] = useState([]); 
     const navigate = useNavigate();
+    const params = useParams(); 
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         async function fetchArticulos() {
@@ -16,6 +19,10 @@ export function Articulos() {
             }
         }
         fetchArticulos();
+
+
+        const adminStatus = localStorage.getItem("is_admin") === "true"; ; 
+        setIsAdmin(adminStatus);
     }, []);
 
     return (
@@ -25,10 +32,10 @@ export function Articulos() {
             </h1>
             <div>
                 <ul className="space-y-4">
-                    {articulos.map((articulo) => ( // Iterar sobre el estado "articulos"
+                    {articulos.map((articulo) => ( 
                         <li
                             onClick={() => {
-                                navigate('/Articulo/' + articulo.id); // Navegar al detalle del artículo
+                                navigate('/articulosFormPage/' + articulo.id); // Navegar al detalle del artículo
                             }}
                             key={articulo.id}
                             className="bg-white shadow-md rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow"
@@ -57,6 +64,18 @@ export function Articulos() {
                         </li>
                     ))}
                 </ul>
+                
+
+                {isAdmin && (
+                <div className="mt-4">
+                    <Link
+                        to="/articulosFormPage" // Cambia esto a la ruta correcta para añadir un nuevo artículo
+                        className="text-white-800"
+                    >
+                        Añadir nuevo Artículo
+                    </Link>
+                </div>
+                )}
             </div>
         </div>
     );

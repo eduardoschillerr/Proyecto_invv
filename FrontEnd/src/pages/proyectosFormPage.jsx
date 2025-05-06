@@ -27,14 +27,14 @@ export function ProyectosFormPage() {
     async function fetchProyecto() {
       if (id) {
         try {
-          const response = await axios.get(`http://localhost:8000/api/proyectos/${id}`);
+          const response = await axios.get(`http://localhost:8000/api/Proyecto/${id}`);
           const { nombre, descripcion, fecha_inicio, fecha_fin, esatus, area_nombre } = response.data;
           setValue("nombre", nombre);
           setValue("descripcion", descripcion);
           setValue("fecha_inicio", fecha_inicio);
           setValue("fecha_fin", fecha_fin);
-          setValue("esatus", esatus);
-          setValue("area_nombre", area_nombre);
+          setValue("esatus", esatus.toString());
+          setValue("area_nombre", area_nombre.toString()); 
         } catch (error) {
           console.error("Error al cargar el proyecto:", error);
         }

@@ -54,7 +54,7 @@ export function InvestigadoresFormPage() {
         async function fetchInvestigador() {
             if (params.id) {
                 try {
-                    const response = await axios.get(`http://localhost:8000/api/Investigadores/${params.id}/`);
+                    const response = await axios.get(`http://localhost:8000/api/Investigador/${params.id}/`);
                     const investigador = response.data;
                     
                     // Establecer los valores del formulario
@@ -66,6 +66,7 @@ export function InvestigadoresFormPage() {
                     setValue("nivel_edu", investigador.nivel_edu);
                     setValue("snii", investigador.snii);
                     setValue("esatus", investigador.esatus.toString());
+                    setValue("imagen", investigador.imagen); // Asignar la imagen si existe
                 } catch (error) {
                     console.error('Error al cargar el investigador:', error);
                 }
@@ -83,14 +84,26 @@ export function InvestigadoresFormPage() {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
+            const formData = new FormData();
+
+            // Agregar todos los campos al FormData
+            for (const key in data) {
+                formData.append(key, data[key]);
+            }
+
+            // Agregar el archivo de imagen si existe
+            if (data.imagen && data.imagen[0]) {
+                formData.append("imagen", data.imagen[0]); // `data.imagen` es un array de archivos
+            }
+
             if (params.id) {
                 // Editar investigador existente
-                const response = await UpdateInvestigador(params.id, data);
+                const response = await UpdateInvestigador(params.id, formData);
                 console.log('Investigador actualizado:', response.data);
                 alert('Investigador actualizado exitosamente');
             } else {
                 // Crear un nuevo investigador
-                const response = await CreateInvestigador(data);
+                const response = await CreateInvestigador(formData);
                 console.log('Investigador creado:', response.data);
                 alert('Investigador creado exitosamente');
             }
@@ -256,6 +269,21 @@ export function InvestigadoresFormPage() {
                             </select>
                             {errors.esatus && <p className="mt-1 text-sm text-red-500">Este campo es requerido</p>}
                         </div>
+
+                        <div>
+                            <label htmlFor="imagen" className="block text-sm font-medium text-gray-700 mb-1">
+                            Imagen
+                            </label>
+                            <input
+                                type="file"
+                                id="imagen"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                {...register("imagen", { required: false })}
+                                accept="image/*"
+                            />
+                        </div>
+
+
                     </div>
                 </div>
 

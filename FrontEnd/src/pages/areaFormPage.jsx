@@ -10,25 +10,16 @@ export function AreaFormPage() {
   const [unidades, setUnidades] = useState([]); 
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
-  
-//   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-//     defaultValues: {
-//       nombre: "",
-//       unidad: "",
-//       esatus: true,
-//     },
-//   });
-
 
   useEffect(() => {
     async function fetchArea() {
       if (id) {
         try {
-          const response = await axios.get(`http://localhost:8000/api/areas/${id}`);
+          const response = await axios.get(`http://localhost:8000/api/Areas/${id}`);
           const area = response.data;
           setValue("nombre", area.nombre);
-          setValue("unidad", area.unidad);
-          setValue("esatus", area.esatus);
+          setValue("unidad", area.unidad.toString()); // Asignar el ID de la unidad
+          setValue("esatus", area.esatus.toString());
         } catch (error) {
           console.error("Error al cargar el área:", error);
         }

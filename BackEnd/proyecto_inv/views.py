@@ -10,14 +10,19 @@ from django.views.generic import ListView, DetailView
 
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.hashers import check_password
+from rest_framework import status
+import logging
+
 
 from .serielizers import  EstudianteSerializer, InvestigadorSerializer, AreaSerializer, EspecialidadesSerializer, UnidadesSerializer, ProyectosSerializer, EventosSerializer, ArticulosSerializer, AreasSerializer, LineasInvestigacionSerializer, DetProySerielizer, DetArtSerielizer, DetEventoSerializer, DetLineaSerializer, CarreraSerializer, TipoEstudianteSerializer, TipoEventoSerializer, NivelEduSerializer, NivelSNIISerializer, UsuarioSerializer
 
 
 from django.views import View
 
-from django.contrib.auth.models import User
+
 
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -43,6 +48,61 @@ def get_nivelsnii(request):
 def get_proyectos(request):
     proyectos = Proyecto.objects.all().values('nombre', 'descripcion')
     return JsonResponse(list(proyectos), safe=False)
+
+## ARTICULOS
+@api_view(['GET'])
+def lista_articulos(request):
+    articulos = Articulo.objects.all()
+    serializer = ArticulosSerializer(articulos, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET', 'PUT'])
+def articulos_detail(request, id):
+    try:
+        articulo = Articulo.objects.get(id=id)
+    except Articulo.DoesNotExist:
+        return Response({"error": "Articulo no encontrado"}, status=404)
+
+    if request.method == 'GET':
+        serializer = ArticulosSerializer(articulo)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = ArticulosSerializer(articulo, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+@api_view(['POST'])
+def create_articulo(request):
+    serializer = ArticulosSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+
+         
+        
+
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+        
+    
+
+
+
+
+@api_view(['DELETE'])
+def delete_articulo(request, id):
+    try:
+        articulo = Articulo.objects.get(id=id)
+        articulo.delete()
+        return Response({"message": "Articulo eliminado correctamente"}, status=200)
+    except Articulo.DoesNotExist:
+        return Response({"error": "Articulo no encontrado"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+    
 
 
 ## INVESTIGADOR 
@@ -268,11 +328,79 @@ def evento_stats(request, id):
 
 
 
+## LOGIN ##
+logger = logging.getLogger(__name__)
+@api_view(['POST'])
+def login_view(request):
+    """
+    Vista mejorada de login con mejor depuración
+    """
+    # Log para ver qué datos están llegando
+    logger.info(f"Datos recibidos: {request.data}")
+    
+    # Obtener credenciales
+    nombre = request.data.get('nombre')
+    password = request.data.get('password')
+    
+    # Validar que se recibieron los datos necesarios
+    if not nombre:
+        logger.error("Falta el nombre de usuario")
+        return Response({'error': 'El nombre de usuario es requerido'}, 
+                        status=status.HTTP_400_BAD_REQUEST)
+    
+    if not password:
+        logger.error("Falta la contraseña")
+        return Response({'error': 'La contraseña es requerida'}, 
+                        status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Buscar el usuario por nombre
+        logger.info(f"Buscando usuario con nombre: {nombre}")
+        usuario = Usuario.objects.get(nombre=nombre)
+        logger.info(f"Usuario encontrado: {usuario.id}")
+        
+        # Comparar directamente la contraseña (sin hash)
+        if password == usuario.password:
+            logger.info("Contraseña correcta")
+            # Determinar si el usuario es administrador
+            is_admin = usuario.esatus
+            
+            return Response({
+                'message': 'Login exitoso',
+                'is_admin': is_admin,
+                'user_id': usuario.id,
+                'nombre': usuario.nombre,
+                'email': usuario.email,
+                'esatus': usuario.esatus  # Asegurarse de que este campo esté en la respuesta
+            }, status=status.HTTP_200_OK)
+        else:
+            logger.warning(f"Contraseña incorrecta para el usuario: {nombre}")
+            return Response({'error': 'Contraseña incorrecta'}, 
+                           status=status.HTTP_401_UNAUTHORIZED)
+    except Usuario.DoesNotExist:
+        logger.warning(f"Usuario no encontrado: {nombre}")
+        return Response({'error': f'Usuario "{nombre}" no encontrado'}, 
+                       status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        logger.error(f"Error en login: {str(e)}")
+        return Response({'error': f'Error interno: {str(e)}'}, 
+                       status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
-
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def is_admin(request):
+    """
+    Verificar si un usuario es administrador
+    """
+    try:
+        usuario = Usuario.objects.get(id=request.user.id)
+        return Response({'is_admin': usuario.esatus})
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=404)
+    except Exception as e:
+        logger.error(f"Error en is_admin: {str(e)}")
+        return Response({'error': f'Error interno: {str(e)}'}, 
+                       status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -568,7 +696,7 @@ def gestion_general(request):
 
 
 def eliminar_registro(request, entidad, pk):
-    # Diccionario para mapear entidades con sus modelos
+    
     entidades = {
         'estudiantes': Estudiante,
         'investigadores': Investigador,

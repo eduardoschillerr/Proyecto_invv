@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { CreateLinea, DeleteLinea, UpdateLinea } from "../api/lineas.api.jsx";
 import axios from "axios";
 
@@ -27,29 +27,61 @@ export function LineasFormPage() {
             }
         }
     }
+
+
+    useEffect(() => {
+        async function fetchLineas() {
+            if (id) {
+                try {
+                    const response = await axios.get(`http://localhost:8000/api/LineasInvestigacion/${id}`);
+                    const linea = response.data;
+                    setValue("nombre", linea.nombre);
+                    setValue("esatus", linea.esatus.toString());
+                    setValue("imagen", linea.imagen);
+                } catch (error) {
+                    console.error("Error al cargar la línea:", error);
+                }
+            }
+        }
     
     fetchLineas();
-    [id, setValue];
+    fetchLineas(); 
 
-     const onSubmit = handleSubmit(async (data) => {
+    },[id, setValue]);
+
+    const onSubmit = handleSubmit(async (data) => {
             try {
+                const formData = new FormData();
+    
+                // Agregar todos los campos al FormData
+                for (const key in data) {
+                    formData.append(key, data[key]);
+                }
+    
+                // Agregar el archivo de imagen si existe
+                if (data.imagen && data.imagen[0]) {
+                    formData.append("imagen", data.imagen[0]); // `data.imagen` es un array de archivos
+                }
+    
                 if (params.id) {
                     // Editar investigador existente
-                    const response = await UpdateLinea(params.id, data);
-                    console.log('Investigador actualizado:', response.data);
-                    alert('Investigador actualizado exitosamente');
+                    const response = await UpdateLinea(params.id, formData);
+                    console.log('Linea actualizada:', response.data);
+                    alert('Linea actualizada exitosamente');
                 } else {
                     // Crear un nuevo investigador
-                    const response = await CreateLinea(data);
-                    console.log('Investigador creado:', response.data);
-                    alert('Investigador creado exitosamente');
+                    const response = await CreateLinea(formData);
+                    console.log('Linea creado:', response.data);
+                    alert('Linea creado exitosamente');
                 }
-                navigate("/investigadores");
+                navigate("/lineas");
             } catch (error) {
-                console.error('Error al guardar el investigador:', error);
-                alert('Hubo un error al guardar el investigador');
+                console.error('Error al guardar la linea:', error);
+                alert('Hubo un error al guardar la linea');
             }
-    });
+        });
+    
+
 
 
     return (
@@ -122,12 +154,32 @@ export function LineasFormPage() {
                 >
                   Cancelar
                 </button>
+
+                {params.id && (
+                    <button 
+                      type="button"
+                      onClick={async () => {
+                          const accept = window.confirm('¿Está seguro de eliminar esta linea?');
+                          if (accept) {
+                            try {
+                              await DeleteLinea(params.id);
+                              navigate("/lineas");
+                            } catch (error) {
+                              console.error('Error al eliminar la Linea:', error);
+                            }
+                        }
+                      }}
+                      className="px-6 py-2 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors ml-auto"
+                    >   
+                      Eliminar
+                    </button>
+                )}
+
               </div>
             </form>
           </div>
         </div>
       );
-
 
 
 

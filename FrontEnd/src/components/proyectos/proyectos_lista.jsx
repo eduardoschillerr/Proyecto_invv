@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 export function Proyectos_Lista() {
     const [proyectos, setProyectos] = useState([]);
     const [Proyecto, setProyecto] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(false); // Estado para verificar si el usuario es admin
+
     
     useEffect(() => {
         async function loadProyecto() {
@@ -13,7 +15,12 @@ export function Proyectos_Lista() {
             setProyecto(res.data);
         }
         loadProyecto();
+
+        const adminStatus = localStorage.getItem("is_admin") === "true"; ; // Obtener el rol del usuario desde localStorage
+        setIsAdmin(adminStatus);
     }, []);
+
+    
 
     return (
 
@@ -29,15 +36,16 @@ export function Proyectos_Lista() {
                 ))}
             </div>
 
-
-            <li>
-                <Link
-                    to="/proyectosFormPage"
-                    className="text-white-800"
-                    >
-                    Añadir 
-                </Link>
-            </li>
+            {isAdmin && (
+                <li>
+                    <Link
+                        to="/proyectosFormPage"
+                        className="text-white-800"
+                        >
+                        Añadir 
+                    </Link>
+                </li>
+            )}
         </div>
     );
 }

@@ -5,8 +5,9 @@ from . import views
 
 from rest_framework.routers import DefaultRouter
 from .views import   EstudianteViewSet, InvestigadorViewSet, TipoEventoViewSet, EspecialidadesViewSet, UnidadesViewSet, ProyectosViewSet, EventosViewSet, ArticulosViewSet, AreasViewSet, LineasInvestigacionViewSet, UsuarioViewSet, DetProyViewSet, DetEventoViewSet, DetArtViewSet, DetLineaViewSet, CarreraViewSet, TipoEstudianteViewSet, NivelEduViewSet, NivelSNIIViewSet
-from .views import get_areas, get_usuarios, get_niveledu,  get_nivelsnii, delete_investigador ,investigador_stats, investigador_detail, get_proyectos, proyectos_detail, proyecto_stats,evento_stats
-
+from .views import get_areas, get_usuarios, get_niveledu,  get_nivelsnii, delete_investigador ,investigador_stats, investigador_detail, get_proyectos, proyectos_detail, proyecto_stats,evento_stats, login_view, is_admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'Estudiante', EstudianteViewSet )
@@ -65,6 +66,10 @@ urlpatterns = [
     path('investigadores/', InvestigadorListView.as_view(), name='investigadores'),
     path('investigadores_det/<int:pk>/', InvestigadorDetailView.as_view(), name='investigadores_det'),
 
+    path('api/is_admin/', is_admin, name='is_admin'),
+    path('api/login/', login_view, name='login'),
+
+
     ##dashboard
     
     # path('api/usuarios/', get_usuarios, name='get_usuarios'),
@@ -96,4 +101,4 @@ urlpatterns = [
 
 
     path("signup/", SignUpView.as_view(), name="signup"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

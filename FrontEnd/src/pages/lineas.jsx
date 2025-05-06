@@ -27,12 +27,12 @@ export function Lineas() {
             </h1>
             <div>
                 <ul className="space-y-4">
-                    {lineas.map((linea) => ( // Iterar sobre el estado "lineas"
+                    {lineas.map((linea) => ( 
                         <li
                             onClick={() => {
-                                navigate('/Lineas/' + linea.id); // Navegar al detalle de la línea
+                                navigate('/lineasFormPage/' + linea.id); // Navegar al detalle de la línea
                             }}
-                            key={linea.id} // Usar el ID correcto
+                            key={linea.id} 
                             className="bg-white shadow-md rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow"
                         >
                             <h2 className="text-xl font-bold text-gray-800">
@@ -54,7 +54,7 @@ export function Lineas() {
 
             <div className="mt-4">
                 <Link
-                    to="/lineasFormPage"
+                    to="/lineasFormPage/" 
                     className="text-white-800"
                 >
                     Añadir Nueva Linea
