@@ -57,7 +57,7 @@ export function InvestigadoresFormPage() {
                     const response = await axios.get(`http://localhost:8000/api/Investigador/${params.id}/`);
                     const investigador = response.data;
                     
-                    // Establecer los valores del formulario
+                    // mostrar campos en el forms 
                     setValue("nombre", investigador.nombre);
                     setValue("tel", investigador.tel);
                     setValue("email", investigador.email);
@@ -66,7 +66,7 @@ export function InvestigadoresFormPage() {
                     setValue("nivel_edu", investigador.nivel_edu);
                     setValue("snii", investigador.snii);
                     setValue("esatus", investigador.esatus.toString());
-                    setValue("imagen", investigador.imagen); // Asignar la imagen si existe
+                    setValue("imagen", investigador.imagen); 
                 } catch (error) {
                     console.error('Error al cargar el investigador:', error);
                 }

@@ -15,7 +15,7 @@ export function Investigadores_lista() {
         }
         loadinvestigadores();
 
-        const adminStatus = localStorage.getItem("is_admin") === "true"; ; // Obtener el rol del usuario desde localStorage
+        const adminStatus = localStorage.getItem("is_admin") === "true"; ; 
         setIsAdmin(adminStatus);
     }, []);
 

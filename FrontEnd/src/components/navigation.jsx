@@ -10,7 +10,7 @@ export function Navigation() {
                     <li>
                         <Link
                             to="/home"
-                            className="block text-blue-500 hover:bg-blue-700 p-2 rounded"
+                            className="block text-white-500 hover:bg-blue-700 p-2 rounded"
                         >
                             Home
                         </Link>

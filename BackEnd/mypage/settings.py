@@ -96,27 +96,27 @@ WSGI_APPLICATION = 'mypage.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': "railway",
-#         'USER': "postgres",
-#         'PASSWORD': "yjAVdljkAAqXtoiESMgwBmpHsjIXMjBD",
-#         'HOST': "gondola.proxy.rlwy.net",
-#         'PORT': "11647"
-#     }
+#      'default': {
+#          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#          'NAME': "railway",
+#          'USER': "postgres",
+#          'PASSWORD': "yjAVdljkAAqXtoiESMgwBmpHsjIXMjBD",
+#          'HOST': "gondola.proxy.rlwy.net",
+#          'PORT': "11647"
+#      }
 # }
 
 
 DATABASES = {
-         'default': {
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': "proyecto_inv_db",
-         'USER': "postgres",
-         'PASSWORD': "123456",
-         'HOST': "localhost",
-         'PORT': "5432"
-     }
- }
+          'default': {
+          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          'NAME': "proyecto_inv_db",
+          'USER': "postgres",
+          'PASSWORD': "123456",
+          'HOST': "localhost",
+          'PORT': "5432"
+      }
+}
 
 
 
@@ -173,5 +173,10 @@ LOGOUT_REDIRECT_URL = "home"  # new
 # CORS settings
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
+    "http://localhost",
 ]
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost",
+    "https://proyecto-inv-frontend.vercel.app",
+]

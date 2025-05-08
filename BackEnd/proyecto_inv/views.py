@@ -89,9 +89,6 @@ def create_articulo(request):
         
     
 
-
-
-
 @api_view(['DELETE'])
 def delete_articulo(request, id):
     try:
@@ -169,23 +166,49 @@ def listar_proyectos(request):
     serializer = ProyectosSerializer(proyectos, many=True)
     return Response(serializer.data)
 
+
+
+@api_view(['POST'])
 def create_proyecto(request):
     serializer = ProyectosSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        proyecto = serializer.save()  # Guarda el proyecto
+
+        # Registrar relaciones en DetProy
+        investigadores_ids = request.data.get('investigadores', [])
+        for investigador_id in investigadores_ids:
+            try:
+                investigador = Investigador.objects.get(id=investigador_id)
+                DetProy.objects.create(proyecto=proyecto, investigador=investigador)
+            except Investigador.DoesNotExist:
+                return Response({"error": f"Investigador con id {investigador_id} no encontrado"}, status=400)
+
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
-@api_view(['DELETE'])
-def delete_proyecto(request, id):
+@api_view(['PUT'])
+def update_proyecto(request, id):
     try:
-        proyectos = Proyecto.objects.get(id=id)
-        proyectos.delete()
-        return Response({"message": "Investigador eliminado correctamente"}, status=200)
-    except Investigador.DoesNotExist:
-        return Response({"error": "Investigador no encontrado"}, status=404)
-    except Exception as e:
-        return Response({"error": str(e)}, status=500)
+        proyecto = Proyecto.objects.get(id=id)
+    except Proyecto.DoesNotExist:
+        return Response({"error": "Proyecto no encontrado"}, status=404)
+
+    serializer = ProyectosSerializer(proyecto, data=request.data)
+    if serializer.is_valid():
+        proyecto = serializer.save()  # Actualiza el proyecto
+
+        # Actualizar relaciones en DetProy
+        investigadores_ids = request.data.get('investigadores', [])
+        DetProy.objects.filter(proyecto=proyecto).delete()  # Eliminar relaciones existentes
+        for investigador_id in investigadores_ids:
+            try:
+                investigador = Investigador.objects.get(id=investigador_id)
+                DetProy.objects.create(proyecto=proyecto, investigador=investigador)
+            except Investigador.DoesNotExist:
+                return Response({"error": f"Investigador con id {investigador_id} no encontrado"}, status=400)
+
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
     
 
 ## AREAS

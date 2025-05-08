@@ -149,7 +149,6 @@ class Proyecto(models.Model):
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     esatus = models.CharField(max_length=20, choices=ESATUS_OPCIONES, default='planeacion')
-    
     Area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True, blank=True)
 
 
@@ -234,7 +233,7 @@ class DetEvento(models.Model):
         return f'{self.investigador} {self.evento}'
 
 class DetProy(models.Model):
-    investigador = models.ForeignKey(Investigador, on_delete=models.CASCADE)
+    investigador = models.ForeignKey('Investigador', on_delete=models.CASCADE)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
     
 

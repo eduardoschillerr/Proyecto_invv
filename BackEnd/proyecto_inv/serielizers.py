@@ -83,11 +83,52 @@ class UnidadesSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class ProyectosSerializer(serializers.ModelSerializer):
+    investigadores = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Investigador.objects.all(), write_only=True
+    )
     area_nombre = serializers.CharField(source='Area.nombre', read_only=True)  # Incluye el nombre del área
+    
 
     class Meta:
         model = Proyecto
-        fields = ['id', 'nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'esatus', 'area_nombre']
+        fields = ['id', 'nombre', 'descripcion', 'fecha_inicio', 'fecha_fin', 'esatus', 'Area', 'investigadores','area_nombre']
+
+    def create(self, validated_data):
+        investigadores_data = validated_data.pop('investigadores', [])
+        print("Datos validados:", validated_data)  # Verifica los datos aquí
+        print("Investigadores (IDs):", investigadores_data)  # Verifica los IDs de los investigadores
+
+        # Crear el proyecto
+        proyecto = Proyecto.objects.create(**validated_data)
+
+        # Crear relaciones en DetProy
+        for investigador_id in investigadores_data:
+            # Asegúrate de que investigador_id sea un número
+            if isinstance(investigador_id, Investigador):
+                investigador_id = investigador_id.id  # Extraer el ID si es un objeto
+            investigador = Investigador.objects.get(id=investigador_id)
+            DetProy.objects.create(proyecto=proyecto, investigador=investigador)
+
+        return proyecto
+
+    def update(self, instance, validated_data):
+        # Extraer los IDs de los investigadores
+        investigadores_data = validated_data.pop('investigadores', [])
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+        instance.fecha_inicio = validated_data.get('fecha_inicio', instance.fecha_inicio)
+        instance.fecha_fin = validated_data.get('fecha_fin', instance.fecha_fin)
+        instance.esatus = validated_data.get('esatus', instance.esatus)
+        instance.Area = validated_data.get('area', instance.Area)
+        instance.save()
+
+        # Actualizar relaciones en DetProy
+        DetProy.objects.filter(proyecto=instance).delete()
+        for investigador_id in investigadores_data:
+            investigador = Investigador.objects.get(id=investigador_id)
+            DetProy.objects.create(proyecto=instance, investigador=investigador)
+
+        return instance
 
 class EventosSerializer(serializers.ModelSerializer):
     class Meta:

@@ -8,6 +8,7 @@ export function ProyectosFormPage() {
   const { id } = useParams(); // Obtener el ID del proyecto de los params de url 
   const navigate = useNavigate(); 
   const [areas, setAreas] = useState([]); // Estado para almacenar las áreas disponibles
+  const [investigadores, setInvestigadores] = useState([]);
 
 
   // Configuración del formulario con react-hook-form
@@ -21,6 +22,13 @@ export function ProyectosFormPage() {
       area_nombre: "",
     },
   });
+
+  
+
+
+      
+
+
 
   // Cargar datos del proyecto si se está editando
   useEffect(() => {
@@ -49,6 +57,18 @@ export function ProyectosFormPage() {
             console.error('Error al cargar las áreas:', error);
         }
     }
+
+    async function fetchInvestigadores() {
+      try {
+          const response = await axios.get("http://localhost:8000/api/Investigador/");
+          setInvestigadores(response.data);
+      } catch (error) {
+          console.error("Error al cargar los investigadores:", error);
+      }
+    }
+
+
+    fetchInvestigadores();
     fetchProyecto();
     fetchAreas(); 
 
@@ -56,6 +76,7 @@ export function ProyectosFormPage() {
 
   // Manejar el envío del formulario
   const onSubmit = async (data) => {
+    console.log("Datos enviados:", data);
     try {
       if (id) {
         // Actualizar proyeto existente
@@ -187,7 +208,26 @@ export function ProyectosFormPage() {
 
 
 
-
+        
+        {/* Investigadores */}
+        <div className="mb-4">
+            <label htmlFor="investigadores" className="block text-gray-700 text-sm font-bold mb-2">
+                Investigadores
+            </label>
+            <select
+                id="investigadores"
+                multiple
+                className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+                {...register("investigadores", { required: true })}
+            >
+                {investigadores.map((investigador) => (
+                    <option key={investigador.id} value={investigador.id}>
+                        {investigador.nombre}
+                    </option>
+                ))}
+            </select>
+            {errors.investigadores && <span className="text-red-500 text-xs italic">Este campo es requerido</span>}
+        </div>
 
         {/* Botones */}
         <div className="flex items-center justify-between">
